@@ -21,3 +21,4 @@ export { default as Succcessful } from "./Booking/Succcessful";
 export { default as Registration } from "./authentication/Registration";
 export { default as Signin } from "./authentication/Signin";
 export { default as SelectedRoom } from "./details/SelectedRoom";
+export { default as Country } from "./CRUD/Country";

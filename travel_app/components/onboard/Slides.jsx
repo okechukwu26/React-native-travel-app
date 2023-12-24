@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../constants/theme";
 
 import { HeightSpacer, ReuseableBtn, ReuseableText } from "../index";
+import reuseable from "../Reuseable/reuseable.Style";
 
 const Slides = ({ item }) => {
   const navigation = useNavigation();
@@ -18,15 +19,26 @@ const Slides = ({ item }) => {
           color={COLORS.white}
         />
         <HeightSpacer height={40} />
-        <ReuseableBtn
-          onPress={() => navigation.navigate("Bottom")}
-          btnText={"get started"}
-          width={(SIZES.width - 50) / 2.2}
-          backgroundColor={COLORS.red}
-          borderColor={COLORS.red}
-          borderWidth={0}
-          textColor={COLORS.white}
-        />
+        <View style={reuseable.rowWithSpace("space-between")}>
+          <ReuseableBtn
+            onPress={() => navigation.navigate("Bottom")}
+            btnText={"get started"}
+            width={(SIZES.width - 50) / 2.2}
+            backgroundColor={COLORS.red}
+            borderColor={COLORS.red}
+            borderWidth={0}
+            textColor={COLORS.white}
+          />
+          <ReuseableBtn
+            onPress={() => navigation.navigate("createCountry")}
+            btnText={"Create Country"}
+            width={(SIZES.width - 50) / 2.2}
+            backgroundColor={COLORS.red}
+            borderColor={COLORS.red}
+            borderWidth={0}
+            textColor={COLORS.white}
+          />
+        </View>
       </View>
     </View>
   );
