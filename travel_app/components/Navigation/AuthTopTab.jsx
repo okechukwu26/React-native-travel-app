@@ -5,12 +5,14 @@ import { COLORS } from "../../constants/theme";
 import AssetImage from "../Reuseable/AssetImage";
 import HeightSpacer from "../Reuseable/HeightSpacer";
 import { Registration, Signin } from "../../screens";
+import ToastManager from "toastify-react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
 const AuthTopTab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+      <ToastManager width={256} />
       <ScrollView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
         <HeightSpacer height={60} />
         <AssetImage
@@ -19,7 +21,7 @@ const AuthTopTab = () => {
           height={200}
           data={require("../../assets/images/bg1.png")}
         />
-        <View style={{height:700}}>
+        <View style={{ height: 700 }}>
           <Tab.Navigator>
             <Tab.Screen name="Signin" component={Signin} />
             <Tab.Screen name="Register" component={Registration} />

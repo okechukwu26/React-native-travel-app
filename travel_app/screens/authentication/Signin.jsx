@@ -13,6 +13,7 @@ import { COLORS, SIZES } from "../../constants/theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import WidthSpacer from "../../components/Reuseable/WidthSpace";
 import ReuseableBtn from "../../components/Button/ReuseableBtn";
+import { Login } from "../../Request/auth";
 
 const validationSchema = yup.object().shape({
   password: yup
@@ -25,7 +26,7 @@ const validationSchema = yup.object().shape({
     .required("This field is required"),
 });
 
-const Signin = () => {
+const Signin = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
   const [response, setResponse] = useState(null);
   const [secureText, setSecureText] = useState(false);
@@ -34,8 +35,8 @@ const Signin = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={(value) => {
-          console.log(value);
+        onSubmit={async (value) => {
+          await Login(setLoader, value, navigation);
         }}
       >
         {({
@@ -123,6 +124,7 @@ const Signin = () => {
               width={SIZES.width - 50}
               btnText={"SIGN IN"}
               onPress={handleSubmit}
+              loader={loader}
             />
           </View>
         )}

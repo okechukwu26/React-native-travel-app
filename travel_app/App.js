@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
+  Country,
   CountryDetails,
   Failed,
   HotelDetails,
@@ -127,6 +128,11 @@ export default function App() {
         <Stack.Screen
           name="SelectedRoom"
           component={SelectedRoom}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="createCountry"
+          component={Country}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
