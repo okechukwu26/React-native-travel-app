@@ -1,20 +1,10 @@
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Country, CreateHotel, CreatePlace } from "../../screens";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  Home,
-  Profile,
-  Chat,
-  Location,
-  Succcessful,
-  Failed,
-} from "../../screens";
-import { Ionicons } from "@expo/vector-icons";
+import { Fontisto, MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/theme";
-import TopTab from "./TopTab";
-import AuthTopTab from "./AuthTopTab";
-
 const Tab = createBottomTabNavigator();
-
 const tabBarStyle = {
   padding: 20,
   borderRadius: 10,
@@ -24,10 +14,11 @@ const tabBarStyle = {
   right: 10,
   left: 10,
 };
-const BottomTabNavigation = () => {
+
+const Admin = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Country"
       activeColor="#EB6A58"
       tabBarHideKeyBoard={true}
       headerShown={false}
@@ -35,36 +26,16 @@ const BottomTabNavigation = () => {
       barStyle={{ paddingBottom: 48 }}
     >
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="Country"
+        component={Country}
         options={{
           tabBarStyle,
           tabBarShowLabel: false,
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={focused ? "grid" : "grid-outline"}
-              color={focused ? COLORS.red : COLORS.gray}
-              size={20}
-              style={{ marginBottom: 15 }}
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Chat"
-        component={Chat}
-        options={{
-          tabBarStyle,
-          tabBarShowLabel: false,
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={
-                focused ? "chatbubble-ellipses" : "chatbubble-ellipses-outline"
-              }
-              color={focused ? COLORS.red : COLORS.gray}
+            <Fontisto
+              name={focused ? "world" : "world-o"}
+              color={focused ? COLORS.lightGreen : COLORS.gray}
               size={20}
               style={{ marginBottom: 15 }}
             />
@@ -72,16 +43,33 @@ const BottomTabNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={TopTab}
+        name="createHotel"
+        component={CreateHotel}
         options={{
           tabBarStyle,
           tabBarShowLabel: false,
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name={focused ? "person" : "person-outline"}
-              color={focused ? COLORS.red : COLORS.gray}
+            <Fontisto
+              name={focused ? "hotel" : "hotel-alt"}
+              color={focused ? COLORS.lightGreen : COLORS.gray}
+              size={20}
+              style={{ marginBottom: 15 }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="createPlaces"
+        component={CreatePlace}
+        options={{
+          tabBarStyle,
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <MaterialIcons
+              name={focused ? "place" : "place"}
+              color={focused ? COLORS.lightGreen : COLORS.gray}
               size={20}
               style={{ marginBottom: 15 }}
             />
@@ -92,4 +80,6 @@ const BottomTabNavigation = () => {
   );
 };
 
-export default BottomTabNavigation;
+export default Admin;
+
+const styles = StyleSheet.create({});

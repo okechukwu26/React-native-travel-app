@@ -1,19 +1,15 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import styles from "./signin.style";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { COLORS, SIZES } from "../../constants/theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import WidthSpacer from "../../components/Reuseable/WidthSpace";
 import ReuseableBtn from "../../components/Button/ReuseableBtn";
 import { Login } from "../../Request/auth";
+import reuseable from "../../components/Reuseable/reuseable.Style";
+import ToastManger from "toastify-react-native";
 
 const validationSchema = yup.object().shape({
   password: yup
@@ -32,6 +28,7 @@ const Signin = ({ navigation }) => {
   const [secureText, setSecureText] = useState(false);
   return (
     <View style={styles.container}>
+      <ToastManger />
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
@@ -116,16 +113,26 @@ const Signin = ({ navigation }) => {
                 )}
               </View>
             </View>
-            <ReuseableBtn
-              textColor={COLORS.white}
-              borderColor={COLORS.green}
-              backgroundColor={COLORS.green}
-              borderWidth={1}
-              width={SIZES.width - 50}
-              btnText={"SIGN IN"}
-              onPress={handleSubmit}
-              loader={loader}
-            />
+            <View style={reuseable.rowWithSpace("space-between")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                <Ionicons
+                  size={40}
+                  color={COLORS.green}
+                  name="md-arrow-back-circle-outline"
+                />
+              </TouchableOpacity>
+              <WidthSpacer width={20} />
+              <ReuseableBtn
+                textColor={COLORS.white}
+                borderColor={COLORS.green}
+                backgroundColor={COLORS.green}
+                borderWidth={1}
+                width={SIZES.width - 100}
+                btnText={"SIGN IN"}
+                onPress={handleSubmit}
+                loader={loader}
+              />
+            </View>
           </View>
         )}
       </Formik>

@@ -24,10 +24,7 @@ const validationSchema = yup.object().shape({
     .string()
     .email("This email is not valid")
     .required("This field is required"),
-  username: yup
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .required("This field is required"),
+
 });
 
 const Registration = ({navigation}) => {
@@ -36,7 +33,7 @@ const Registration = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Formik
-        initialValues={{ email: "", password: "", username: " " }}
+        initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
         onSubmit={async (value) => {
           await RegisterUser(setLoader, value, navigation);
@@ -52,36 +49,7 @@ const Registration = ({navigation}) => {
           setFieldTouched,
         }) => (
           <View>
-            <View style={styles.wrapper}>
-              <View>
-                <Text style={styles.label}>Username</Text>
-                <View
-                  style={styles.inputWrapper(
-                    touched.email ? COLORS.lightBlue : COLORS.lightGrey
-                  )}
-                >
-                  <MaterialCommunityIcons
-                    name="face-man-profile"
-                    size={20}
-                    color={COLORS.gray}
-                  />
-                  <WidthSpacer width={10} />
-                  <TextInput
-                    placeholder="Enter Username"
-                    onFocus={() => setFieldTouched("username")}
-                    onBlur={() => setFieldTouched("username", "")}
-                    onChangeText={handleChange("username")}
-                    value={values.username}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={{ flex: 1 }}
-                  />
-                </View>
-                {touched.username && errors.username && (
-                  <Text style={styles.errorMessage}>{errors.username}</Text>
-                )}
-              </View>
-            </View>
+           
             <View style={styles.wrapper}>
               <View>
                 <Text style={styles.label}>Email</Text>

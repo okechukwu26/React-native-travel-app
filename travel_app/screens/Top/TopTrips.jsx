@@ -58,7 +58,7 @@ const TopTrips = () => {
     },
   ];
   return (
-    <View style={{margin:20, marginBottom:70}}>
+    <View style={{margin:20, marginBottom:100}}>
        <FlatList
         data={recommendations}
         keyExtractor={(item) => item._id}

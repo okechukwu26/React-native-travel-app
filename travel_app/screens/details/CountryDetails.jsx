@@ -23,6 +23,7 @@ const CountryDetails = ({ navigation }) => {
   const route = useRoute();
 
   const item = route.params;
+  console.log(item)
   const country = {
     _id: "64c62bfc65af9f8c969a8d04",
     country: "USA",
@@ -57,7 +58,7 @@ const CountryDetails = ({ navigation }) => {
     <ScrollView>
       <View>
         <NetworkImage
-          source={country.imageUrl}
+          source={item.imageUrl}
           width={"100%"}
           height={350}
           borderRadius={0}
@@ -67,7 +68,7 @@ const CountryDetails = ({ navigation }) => {
           color={COLORS.white}
           color1={COLORS.white}
           icon={"search1"}
-          title={country.country}
+          title={item.country}
           onPress={() => navigation.goBack()}
           onPress1={() => {}}
           top={40}
@@ -79,11 +80,11 @@ const CountryDetails = ({ navigation }) => {
       <View style={styles.description}>
         <ReuseableText
           family={"medium"}
-          text={country.region}
+          text={item.region}
           size={TEXT.large}
           color={COLORS.black}
         />
-        <DescriptionText text={country.description} />
+        <DescriptionText text={item.description} />
         <View style={{ alignContent: "center" }}>
           <HeightSpacer height={15} />
           <View style={reuseable.rowWithSpace("space-between")}>
@@ -98,7 +99,8 @@ const CountryDetails = ({ navigation }) => {
             </TouchableOpacity>
           </View>
           <HeightSpacer height={15} />
-          <PopularList data={country.popular} />
+          <PopularList data={item.popular} />
+          <HeightSpacer height={20} />
           <ReuseableBtn
             onPress={() => navigation.navigate("HotelSearch")}
             btnText={"Find Best Hotel"}

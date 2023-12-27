@@ -60,7 +60,7 @@ const TopBookings = () => {
     },
   ];
   return (
-    <View style={{ margin: 20, marginBottom:70 }}>
+    <View style={{ margin: 20, marginBottom: 100 }}>
       <FlatList
         data={hotels}
         keyExtractor={(item) => item._id}
@@ -74,15 +74,30 @@ const TopBookings = () => {
             }}
           >
             <ReuseableTitle item={item} />
-            <View style={[reuseable.rowWithSpace("space-between"),{padding:10}]}>
-              <ReuseableBtn borderColor={COLORS.lightBlue}  borderWidth={1} backgroundColor={COLORS.white} textColor={COLORS.blue} btnText={"Details"} width={"50%"} />
+            <View
+              style={[reuseable.rowWithSpace("space-between"), { padding: 10 }]}
+            >
+              <ReuseableBtn
+                borderColor={COLORS.lightBlue}
+                borderWidth={1}
+                backgroundColor={COLORS.white}
+                textColor={COLORS.blue}
+                btnText={"Details"}
+                width={"50%"}
+              />
               <WidthSpacer width={5} />
-              <ReuseableBtn borderColor={COLORS.lightRed}  borderWidth={1} backgroundColor={COLORS.red} textColor={COLORS.white} btnText={"Cancel"} width={"50%"}  />
+              <ReuseableBtn
+                borderColor={COLORS.lightRed}
+                borderWidth={1}
+                backgroundColor={COLORS.red}
+                textColor={COLORS.white}
+                btnText={"Cancel"}
+                width={"50%"}
+              />
             </View>
           </View>
         )}
       />
-      
     </View>
   );
 };
