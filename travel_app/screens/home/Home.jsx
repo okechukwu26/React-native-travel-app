@@ -19,32 +19,54 @@ const Home = ({ navigation }) => {
   const [isLoading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
 
-  const getAll = useCallback(async () => {
-    const db = firestore;
-    setLoading(true);
-    const [Hotel] = await Promise.all([getDocs(collection(db, "hotel"))]);
-    const user = await AsyncStorage.getItem("user");
-    if (user) {
-      const profile = await getProfile();
-      if (profile) {
-        setUsername(profile.UserName);
-      }
-    }
+  // const getAll = useCallback(async () => {
+  //   const db = firestore;
+  //   setLoading(true);
+  //   const [Hotel] = await Promise.all([getDocs(collection(db, "hotel"))]);
+  //   const user = await AsyncStorage.getItem("user");
+  //   if (user) {
+  //     const profile = await getProfile();
+  //     if (profile) {
+  //       setUsername(profile.UserName);
+  //     }
+  //   }
 
-    const hotel1 = [];
-    Hotel.forEach((doc) => {
-      hotel1.push({
-        _id: doc.id,
-        ...doc.data(),
-      });
-    });
-    setHotel(hotel1);
-    setLoading(false);
-  }, []);
+  //   const hotel1 = [];
+  //   Hotel.forEach((doc) => {
+  //     hotel1.push({
+  //       _id: doc.id,
+  //       ...doc.data(),
+  //     });
+  //   });
+  //   setHotel(hotel1);
+  //   setLoading(false);
+  // }, []);
   useFocusEffect(
     useCallback(() => {
-      getAll();
-    }, [getAll])
+      const fetchData = async () => {
+        const db = firestore;
+        setLoading(true);
+        const [Hotel] = await Promise.all([getDocs(collection(db, "hotel"))]);
+        const user = await AsyncStorage.getItem("user");
+        if (user) {
+          const profile = await getProfile();
+          if (profile) {
+            
+            setUsername(profile.UserName);
+          }
+        }
+        const hotel1 = [];
+        Hotel.forEach((doc) => {
+          hotel1.push({
+            _id: doc.id,
+            ...doc.data(),
+          });
+        });
+        setHotel(hotel1);
+        setLoading(false);
+      };
+      fetchData();
+    }, [])
   );
   return (
     <SafeAreaView style={reuseable.container}>

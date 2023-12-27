@@ -25,13 +25,13 @@ export const CreateProfile = async (collectionName, data, navigation) => {
     }
 
     const _id = JSON.parse(user).localId;
-    const updated = await addDoc(collection(firestore, collectionName), {
+   
+    await addDoc(collection(firestore, collectionName), {
       ...data,
       owner: _id,
     });
 
     Toast.success("profile updated!");
-    // updated.forEach((doc) => console.log("data", doc.data()));
 
     setTimeout(() => {
       navigation.goBack();

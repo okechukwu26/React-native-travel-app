@@ -14,6 +14,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import WidthSpacer from "../../components/Reuseable/WidthSpace";
 import ReuseableBtn from "../../components/Button/ReuseableBtn";
 import { RegisterUser } from "../../Request/auth";
+import ToastManger from "toastify-react-native";
 
 const validationSchema = yup.object().shape({
   password: yup
@@ -24,14 +25,14 @@ const validationSchema = yup.object().shape({
     .string()
     .email("This email is not valid")
     .required("This field is required"),
-
 });
 
-const Registration = ({navigation}) => {
+const Registration = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
   const [secureText, setSecureText] = useState(false);
   return (
     <View style={styles.container}>
+      <ToastManger />
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={validationSchema}
@@ -49,7 +50,6 @@ const Registration = ({navigation}) => {
           setFieldTouched,
         }) => (
           <View>
-           
             <View style={styles.wrapper}>
               <View>
                 <Text style={styles.label}>Email</Text>
@@ -123,7 +123,7 @@ const Registration = ({navigation}) => {
               backgroundColor={COLORS.green}
               borderWidth={1}
               width={SIZES.width - 50}
-              btnText={"REGISTER"}
+              btnText={loader ? "Please wait..." : "REGISTER"}
               onPress={handleSubmit}
               loader={loader}
             />

@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   Authenticate,
+  Card,
   Country,
   CountryDetails,
   EditCountry,
@@ -164,6 +165,11 @@ export default function App() {
         <Stack.Screen
           name="editProfile"
           component={EditProfile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Card"
+          component={Card}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

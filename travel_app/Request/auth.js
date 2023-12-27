@@ -9,23 +9,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const RegisterUser = async (loading, value, navigation) => {
   try {
     loading(true);
-    const res = await createUserWithEmailAndPassword(
+   await createUserWithEmailAndPassword(
       auth,
       value.email,
       value.password
     );
 
     loading(false);
-    Toast.success("registration successful");
+    Toast.success("registration successful", "top");
     setTimeout(() => {
       navigation.goBack();
     }, 3000);
   } catch (error) {
     loading(false);
     if (error.code === "auth/email-already-in-use") {
-      Toast.error("Email is already in use");
+      Toast.error("Email is already in use", "top");
     } else {
-      Toast.error("Firebase authentication error");
+      Toast.error("Firebase authentication error", "top");
     }
   }
 };
@@ -48,9 +48,9 @@ export const Login = async (loading, value, navigation) => {
     loading(false);
 
     if (error.code === "auth/invalid-credential") {
-      Toast.error("invalid credentials");
+      Toast.error("invalid credentials", "top");
     } else {
-      Toast.error("something went wrong");
+      Toast.error("something went wrong", "top");
     }
   }
 };

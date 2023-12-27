@@ -28,3 +28,4 @@ export { default as CreateHotel } from "./CRUD/CreateHotel";
 export { default as CreatePlace } from "./CRUD/CreatePlace";
 export { default as EditCountry } from "./CRUD/EditCountry";
 export { default as EditProfile } from "./profile/EditProfile";
+export { default as Card } from "./profile/Card";
