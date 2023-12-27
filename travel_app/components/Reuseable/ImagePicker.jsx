@@ -1,9 +1,14 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, Platform } from "react-native";
 import React from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import * as ImagePickers from "expo-image-picker";
-import { storage } from "../../firebase";
+import {
+  storage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "../../firebase";
 import { Toast } from "toastify-react-native";
 
 const ImagePicker = React.forwardRef(
@@ -12,68 +17,93 @@ const ImagePicker = React.forwardRef(
     refs
   ) => {
     const handleImage = async () => {
-      const permissionResult =
-        await ImagePickers.requestMediaLibraryPermissionsAsync();
-      if (permissionResult.granted === false) {
-        alert("Permission to access camera roll is required!");
-        return;
-      }
+      try {
+        const permissionResult =
+          await ImagePickers.requestMediaLibraryPermissionsAsync();
+        if (permissionResult.granted === false) {
+          alert("Permission to access camera roll is required!");
+          return;
+        }
 
-      const pickerResult = await ImagePickers.launchImageLibraryAsync({
-        mediaTypes: ImagePickers.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
+        const pickerResult = await ImagePickers.launchImageLibraryAsync({
+          mediaTypes: ImagePickers.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
 
-      if (!pickerResult.canceled && pickerResult.assets.length > 0) {
-        const selectedImage = pickerResult.assets[0];
-        const storageRef = ref(storage, "images/" + selectedImage.fileName);
+        if (!pickerResult.canceled && pickerResult.assets.length > 0) {
+          const image = pickerResult.assets[0];
 
-        // Convert selected image to blob
-        const response = await fetch(selectedImage.uri);
-        const blob = await response.blob();
+          const metadata = {
+            contentType: "image/jpeg",
+          };
+          Loading(true);
+          let uploadTask;
+          if (Platform.OS === "android") {
+            const storageRef = ref(storage, "images/" + Date.now());
+            const imageBlob = await getBlobFroUri(image.uri);
+            uploadTask = uploadBytesResumable(storageRef, imageBlob, metadata);
+          } else if (Platform.OS === "ios") {
+            const response = await fetch(image.uri);
 
-        // Upload the blob to Firebase Storage
-        const uploadTask = uploadBytesResumable(storageRef, blob);
+            const storageRef = ref(storage, "images/" + image.fileName);
+            const blob = await response.blob();
 
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            Loading(true);
-            // Progress updates (if needed)
-            const upload =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            uploadTask = uploadBytesResumable(storageRef, blob);
+          } else {
+            throw new Error("Unsupported platform");
+          }
 
-            progress(upload);
-            if (progress == 100) {
-              Loading(false);
-            }
-          },
-          (error) => {
-            // Handle unsuccessful uploads
-            setUploadError("Error uploading image");
-          },
-          () => {
-            // Handle successful uploads on completion
-            getDownloadURL(uploadTask.snapshot.ref)
-              .then((downloadURL) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const upload =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              console.log("Upload is " + upload + "% done");
+              progress(upload);
+
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.log(error.code);
+              switch (error.code) {
+                case "storage/unauthorized":
+                  break;
+                case "storage/canceled":
+                  break;
+
+                // ...
+
+                case "storage/unknown":
+                  break;
+              }
+            },
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log(downloadURL);
                 setImage(downloadURL);
                 Toast.success("image uploaded");
-
-                // You can use the 'downloadURL' for displaying the image or further operations
-              })
-              .catch((error) => {
-                console.error("Error getting download URL:", error);
-                Toast.success("error try again");
+                Loading(false);
               });
-          }
-        );
-        closeSheet(); // Accessing the selected image URI from assets
-      } else {
+            }
+          );
+        }
         closeSheet();
+      } catch (error) {
+        console.log(error.code);
+        Toast.error("error try again");
+        Loading(false);
       }
     };
+
     return (
       <RBSheet
         ref={refs}
@@ -109,3 +139,20 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
 });
+
+const getBlobFroUri = async (uri) => {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function (e) {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+
+  return blob;
+};

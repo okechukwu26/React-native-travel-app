@@ -30,8 +30,8 @@ const Slides = ({ item }) => {
             textColor={COLORS.white}
           />
           <ReuseableBtn
-            onPress={() => navigation.navigate("createCountry")}
-            btnText={"Create Country"}
+            onPress={() => navigation.navigate("Admin")}
+            btnText={"Admin"}
             width={(SIZES.width - 50) / 2.2}
             backgroundColor={COLORS.red}
             borderColor={COLORS.red}

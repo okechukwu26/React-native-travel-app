@@ -11,7 +11,6 @@ import {
   DescriptionText,
   HeightSpacer,
   NetworkImage,
-  PopularList,
   ReuseableBtn,
   ReuseableText,
 } from "../../components";
@@ -19,6 +18,7 @@ import AppBar from "../../components/Reuseable/AppBar";
 import { COLORS, SIZES, TEXT } from "../../constants/theme";
 import reuseable from "../../components/Reuseable/reuseable.Style";
 import { Feather } from "@expo/vector-icons";
+import PopularList from "../../components/Country/PopularList";
 
 const PlaceDetails = ({ navigation }) => {
   const route = useRoute();

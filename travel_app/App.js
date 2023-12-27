@@ -4,8 +4,11 @@ import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
+  Authenticate,
   Country,
   CountryDetails,
+  EditCountry,
+  EditProfile,
   Failed,
   HotelDetails,
   HotelList,
@@ -13,6 +16,7 @@ import {
   Onboardng,
   Payments,
   PlaceDetails,
+  ProfileDetails,
   Recommended,
   Registration,
   Search,
@@ -21,8 +25,10 @@ import {
   Settings,
   Signin,
   Succcessful,
+  User,
 } from "./screens";
 import BottomTabNavigation from "./components/Navigation/BottomTabNavigation";
+import Admin from "./components/Navigation/Admin";
 
 const Stack = createNativeStackNavigator();
 
@@ -131,8 +137,33 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="createCountry"
-          component={Country}
+          name="Admin"
+          component={Admin}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authenticate"
+          component={Authenticate}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="User"
+          component={User}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="profileDetails"
+          component={ProfileDetails}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="editCountry"
+          component={EditCountry}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="editProfile"
+          component={EditProfile}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

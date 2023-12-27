@@ -14,9 +14,9 @@ export const RegisterUser = async (loading, value, navigation) => {
       value.email,
       value.password
     );
-    await AsyncStorage.setItem("user", JSON.stringify(res._tokenResponse));
+
     loading(false);
-    Toast.success("registration successful", { autoClose: 2000 });
+    Toast.success("registration successful");
     setTimeout(() => {
       navigation.goBack();
     }, 3000);
@@ -31,23 +31,22 @@ export const RegisterUser = async (loading, value, navigation) => {
 };
 export const Login = async (loading, value, navigation) => {
   try {
-  ;
     loading(true);
     const res = await signInWithEmailAndPassword(
       auth,
       value.email,
       value.password
     );
-    loading(false);
-    Toast.success("login successful", { autoClose: 2000 });
-    setTimeout(() => {
-      navigation.navigate("Onboard");
-    }, 3000);
 
     await AsyncStorage.setItem("user", JSON.stringify(res._tokenResponse));
+    loading(false);
+    Toast.success("login successful");
+    setTimeout(() => {
+      navigation.navigate("Home");
+    }, 3000);
   } catch (error) {
     loading(false);
-    
+
     if (error.code === "auth/invalid-credential") {
       Toast.error("invalid credentials");
     } else {

@@ -1,10 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, Platform, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import { COLORS, SIZES, TEXT } from "../../constants/theme";
 import reuseable from "./reuseable.Style";
 import WidthSpacer from "./WidthSpace";
-import ReuseableText from './ReuseableText';
+import ReuseableText from "./ReuseableText";
 
 const CountryList = ({ country, select }) => {
   return (
@@ -12,28 +12,48 @@ const CountryList = ({ country, select }) => {
       <SelectDropdown
         data={country}
         onSelect={(selectedItem) => {
-          select((prev) => ({
-            ...prev,
-            country: selectedItem.country,
-            region: selectedItem.region,
-          }));
+          console.log(selectedItem._id);
+          selectedItem._id === undefined
+            ? select((prev) => ({
+                ...prev,
+                country: selectedItem.country,
+                region: selectedItem.region,
+              }))
+            : select((prev) => ({
+                ...prev,
+                country: selectedItem.country,
+                region: selectedItem.region,
+                country_id: selectedItem._id,
+              }));
+          // selectedItem._id
+          //  select((prev) => ({
+          //     ...prev,
+          //     country: selectedItem.country,
+          //     region: selectedItem.region,
+          //     country_id: selectedItem._id,
+          //   }))
+          //  select((prev) => ({
+          //     ...prev,
+          //     country: selectedItem.country,
+          //     region: selectedItem.region,
+          //   }));
         }}
         renderCustomizedRowChild={(item, index) => (
-          <View style={reuseable.rowWithSpace("space-between")}>
-            {/* Customize the dropdown row content here */}
-            <Text style={{ fontSize: TEXT.medium }}>{item.flag}</Text>
-            <Text>{item.country}</Text>
-          </View>
+          <MemoizedDropdownRow item={item} />
         )}
         rowTextForSelection={(item) => <MemoizedDropdownRow item={item} />}
         buttonTextAfterSelection={(item, index) => {
-          return (
+          return Platform.OS === "android" ? (
+            <Text style={{ color: COLORS.dark, fontFamily: "medium" }}>
+              {item.country} {item.flag}
+            </Text>
+          ) : (
             <View style={reuseable.rowWithSpace("space-between")}>
-              <Text style={{ fontSize: TEXT.medium }}>{item.flag}</Text>
-              <WidthSpacer width={20} />
+              <Text style={{ flex: 1 }}>{item.flag}</Text>
+              <WidthSpacer width={30} />
               <Text>{item.country}</Text>
             </View>
-          ); // Display selected item text
+          );
         }}
         buttonStyle={styles.dropdownButton}
         buttonTextStyle={styles.dropdownButtonText}
@@ -72,7 +92,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: COLORS.lightBlue,
     borderRadius: 8,
-  
+
     marginTop: 8,
   },
   dropdownRow: {
@@ -86,13 +106,15 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const MemoizedDropdownRow = React.memo(({ item }) => {
   return (
-    <View style={reuseable.rowWithSpace("space-between")}>
-     <ReuseableText size={TEXT.medium} family={"medium"} text={item.flag} />
-     <ReuseableText size={TEXT.medium} family={"medium"} text={item.country} />
-      
+    <View
+      style={reuseable.rowWithSpace(item.flag ? "space-between" : "center")}
+    >
+      {item.flag && (
+        <ReuseableText size={TEXT.medium} family={"medium"} text={item.flag} />
+      )}
+      <ReuseableText size={TEXT.medium} family={"medium"} text={item.country} />
     </View>
   );
 });

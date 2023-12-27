@@ -14,7 +14,7 @@ const DescriptionInput = ({
   family,
 }) => {
   return (
-    <View style={{ marginHorizontal: 25 }}>
+    <View style={{ marginHorizontal: 25, alignItems:"flex-start", justifyContent:"flex-start" }}>
       <TextInput
         multiline
         placeholder={placeholder}
