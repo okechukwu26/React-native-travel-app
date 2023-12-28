@@ -21,6 +21,7 @@ const Payments = ({ navigation }) => {
     { name: "Mastercard", toggle: false },
     { name: "PayPal", toggle: false },
   ]);
+  const [loading, setLoading] = useState(false);
 
   const toggleSwitch = (index) => {
     const updatedSwitchStates = switchStates.map((item, idx) => ({
@@ -44,14 +45,16 @@ const Payments = ({ navigation }) => {
       card: require("../../assets/images/PayPal.png"),
     },
   ];
-  const SavePaymentMethod = () => {
+  const SavePaymentMethod = async () => {
     const select = switchStates.every((item) => item.toggle === false);
     if (select) {
       return Toast.error("select one payment method");
     }
     const selected = switchStates.find((item) => item.toggle === true);
-    console.log(selected);
-    CreatePaymentMethod("paymentMethod", selected);
+
+    setLoading(true);
+    await CreatePaymentMethod("paymentMethod", selected);
+    setLoading(false);
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -117,12 +120,13 @@ const Payments = ({ navigation }) => {
         <View style={{ marginHorizontal: 20 }}>
           <ReuseableBtn
             textColor={COLORS.white}
-            btnText={"Save Payment Method"}
+            btnText={loading ? "Please wait..." : "Save Payment Method"}
             width={SIZES.width - 50}
             backgroundColor={COLORS.green}
             borderColor={COLORS.green}
             borderWidth={1}
             onPress={SavePaymentMethod}
+            loader={loading}
           />
         </View>
         <HeightSpacer height={10} />

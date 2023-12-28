@@ -102,12 +102,13 @@ const CreateHotel = ({ navigation }) => {
         title: "This field is required",
       }));
     }
+
     setLoading(true);
     await createHotel("hotel", form);
     setLoading(false);
-    // await createCountry("hotel", form);
-    // setForm({ country: "", imageUrl: "", region: "", description: "" });
-    // setFormError({ country: "", imageUrl: "", description: "" });
+    await createCountry("hotel", form);
+    setForm({ country: "", imageUrl: "", region: "", description: "" });
+    setFormError({ country: "", imageUrl: "", description: "" });
   });
   return (
     <AdminContainer

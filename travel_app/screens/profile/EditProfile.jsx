@@ -61,7 +61,7 @@ const EditProfile = ({ navigation }) => {
       return Toast.error("please fill one field", "top");
     }
     const updated = RemoveEmptyValues(form);
-    console.log(updated);
+  
     setUpdateLoading(true);
     await CreateProfile("profile", updated, navigation);
     setUpdateLoading(false);

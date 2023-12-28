@@ -1,4 +1,10 @@
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import reuseable from "../../components/Reuseable/reuseable.Style";
 import { HeightSpacer, ReuseableText } from "../../components";
@@ -44,28 +50,23 @@ const Home = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
-        const db = firestore;
         setLoading(true);
-        const [Hotel] = await Promise.all([getDocs(collection(db, "hotel"))]);
+
         const user = await AsyncStorage.getItem("user");
+
         if (user) {
           const profile = await getProfile();
+
           if (profile) {
-            
             setUsername(profile.UserName);
           }
+        } else {
+          setUsername("");
         }
-        const hotel1 = [];
-        Hotel.forEach((doc) => {
-          hotel1.push({
-            _id: doc.id,
-            ...doc.data(),
-          });
-        });
-        setHotel(hotel1);
+
         setLoading(false);
       };
-      fetchData();
+      fetchData().then(() => setLoading(false));
     }, [])
   );
   return (
@@ -78,12 +79,16 @@ const Home = ({ navigation }) => {
               { paddingHorizontal: 10 },
             ]}
           >
-            <ReuseableText
-              text={username ? `welcome ${username} ` : "Hey User!"}
-              family={"medium"}
-              size={TEXT.medium}
-              color={COLORS.black}
-            />
+            {isLoading ? (
+              <ActivityIndicator size="small" color={COLORS.blue} />
+            ) : (
+              <ReuseableText
+                text={username ? `welcome ${username} ` : "Hey User!"}
+                family={"medium"}
+                size={TEXT.medium}
+                color={COLORS.black}
+              />
+            )}
             <TouchableOpacity
               style={style.box}
               onPress={() => navigation.navigate("Search")}
@@ -104,7 +109,8 @@ const Home = ({ navigation }) => {
           <HeightSpacer height={3} />
           <Recommendation />
           <HeightSpacer height={15} />
-          <BestHotels hotel={hotel} />
+
+          <BestHotels />
         </View>
         <HeightSpacer height={70} />
       </ScrollView>

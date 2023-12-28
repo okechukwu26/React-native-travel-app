@@ -1,4 +1,4 @@
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import {
   AppBar,
@@ -15,41 +15,17 @@ import styles from "./HotelDetails.style";
 import reuseable from "../../components/Reuseable/reuseable.Style";
 import { Rating } from "react-native-stock-star-rating";
 import { Feather } from "@expo/vector-icons";
+
+import { useRoute } from "@react-navigation/native";
 const HotelDetails = ({ navigation }) => {
-  const hotel = {
-    availability: {
-      start: "2023-08-20T00:00:00.000Z",
-      end: "2023-08-25T00:00:00.000Z",
-    },
-    _id: "64c675793cfa5e847bcd5436",
-    country_id: "64c62bfc65af9f8c969a8d04",
-    title: "Urban Chic Boutique Hotel",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris sit amet massa vitae tortor condimentum lacinia quis. Elit ut aliquam purus sit amet luctus. Nunc mi ipsum faucibus vitae aliquet. Et magnis dis parturient montes nascetur ridiculus mus mauris. Vel fringilla est ullamcorper eget nulla facilisi.",
-    contact: "64c5d95adc7efae2a45ec376",
-    imageUrl:
-      "https://d326fntlu7tb1e.cloudfront.net/uploads/5da4db00-e83f-449a-a97a-b7fa80a5bda6-aspen.jpeg",
-    rating: 4.8,
-    review: "2312 Reviews",
-    location: "San Francisco, CA",
+  const router = useRoute();
+  const { item } = router.params;
 
-    latitude: 37.7749,
-    longitude: -122.4194,
-
-    price: 400,
-    facilities: [
-      {
-        wifi: true,
-        _id: "64c675793cfa5e847bcd5437",
-      },
-    ],
-    __v: 0,
-  };
   let coordinates = {
-    id: hotel._id,
-    title: hotel.title,
-    latitude: hotel.latitude,
-    longitude: hotel.longitude,
+    id: item._id,
+    title: item.title,
+    latitude: item.latitude,
+    longitude: item.longitude,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -60,9 +36,9 @@ const HotelDetails = ({ navigation }) => {
           color={COLORS.white}
           color1={COLORS.white}
           icon={"search1"}
-          title={hotel.title}
+          title={item.title}
           onPress={() => navigation.goBack()}
-          onPress1={() => {}}
+          onPress1={() => navigation.navigate("HotelSearch")}
           top={50}
           left={20}
           right={20}
@@ -72,7 +48,7 @@ const HotelDetails = ({ navigation }) => {
       <View>
         <View style={styles.container}>
           <NetworkImage
-            source={hotel.imageUrl}
+            source={item.imageUrl}
             width={"100%"}
             height={200}
             borderRadius={20}
@@ -80,14 +56,14 @@ const HotelDetails = ({ navigation }) => {
           <View style={styles.titleContainer}>
             <View style={styles.titleColumn}>
               <ReuseableText
-                text={hotel.title}
+                text={item.title}
                 family={"medium"}
                 size={SIZES.large}
                 color={COLORS.black}
               />
               <HeightSpacer height={10} />
               <ReuseableText
-                text={hotel.location}
+                text={item.location}
                 family={"medium"}
                 size={SIZES.medium}
                 color={COLORS.black}
@@ -96,12 +72,12 @@ const HotelDetails = ({ navigation }) => {
               <View style={reuseable.rowWithSpace("space-between")}>
                 <Rating
                   maxStars={5}
-                  stars={hotel.rating}
+                  stars={item.rating}
                   bordered={false}
                   color={"#FD9942"}
                 />
                 <ReuseableText
-                  text={`(${hotel.review})`}
+                  text={`(${item.review})`}
                   family={"medium"}
                   size={SIZES.medium}
                   color={COLORS.gray}
@@ -118,7 +94,7 @@ const HotelDetails = ({ navigation }) => {
             color={COLORS.black}
           />
           <HeightSpacer height={10} />
-          <DescriptionText text={hotel.description} />
+          <DescriptionText text={item.description} />
           <HeightSpacer height={10} />
           <ReuseableText
             text={"Location"}
@@ -128,7 +104,7 @@ const HotelDetails = ({ navigation }) => {
           />
           <HeightSpacer height={15} />
           <ReuseableText
-            text={hotel.location}
+            text={item.location}
             family={"regular"}
             size={SIZES.small + 2}
             color={COLORS.gray}
@@ -142,7 +118,7 @@ const HotelDetails = ({ navigation }) => {
               color={COLORS.gray}
             />
             <TouchableOpacity>
-              <Feather name="list" size={20} i />
+              <Feather name="list" size={20} />
             </TouchableOpacity>
           </View>
           <HeightSpacer height={10} />
@@ -151,7 +127,7 @@ const HotelDetails = ({ navigation }) => {
         <View style={[reuseable.rowWithSpace("space-between"), styles.bottom]}>
           <View>
             <ReuseableText
-              text={`\$ ${hotel.price}`}
+              text={`\$ ${item.price}`}
               family={"medium"}
               size={SIZES.large}
               color={COLORS.black}

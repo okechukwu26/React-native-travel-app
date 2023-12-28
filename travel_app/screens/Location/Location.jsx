@@ -20,7 +20,6 @@ const Location = () => {
       let { status } = await Locate.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
-        console.log("Location permission denied");
         return;
       }
 
@@ -37,15 +36,15 @@ const Location = () => {
 
   return (
     <MapView style={styles.mapStyles} region={coordinate}>
-    <Marker coordinate={coordinate} title={coordinate.title} />
-  </MapView>
+      <Marker coordinate={coordinate} title={coordinate.title} />
+    </MapView>
   );
 };
 
 export default Location;
 
 const styles = StyleSheet.create({
-  mapStyles:{
-    ...StyleSheet.absoluteFillObject
-  }
+  mapStyles: {
+    ...StyleSheet.absoluteFillObject,
+  },
 });

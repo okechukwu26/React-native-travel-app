@@ -1,5 +1,5 @@
 import { Image, View } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { TopBookings, TopInfo, TopTrips } from "../../screens";
 import { COLORS, SIZES } from "../../constants/theme";
@@ -8,15 +8,30 @@ import AppBar from "../Reuseable/AppBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HeightSpacer from "../Reuseable/HeightSpacer";
 import ReuseableText from "../Reuseable/ReuseableText";
+import { getProfile } from "../../Request/Profile.js";
+import NetworkImage from "../Reuseable/NetworkImage";
 
 const Tab = createMaterialTopTabNavigator();
 const AuthTopTab = ({ navigation, email, setLoggedIn, setEmail }) => {
+  const [profile, setProfile] = useState({});
   const handleLogout = useCallback(async () => {
     await AsyncStorage.removeItem("user");
     setLoggedIn(false);
     setEmail("");
     navigation.navigate("Home");
   }, [setLoggedIn, navigation, email]);
+  const myProfile = useCallback(async () => {
+    const profile = await getProfile();
+    if (profile) {
+      setProfile(profile);
+    }
+  }, []);
+
+  useEffect(() => {
+    myProfile();
+  }, [myProfile]);
+
+  console.log(profile);
 
   return (
     <View>
@@ -34,17 +49,20 @@ const AuthTopTab = ({ navigation, email, setLoggedIn, setEmail }) => {
             icon={"logout"}
             color1={COLORS.white}
             onPress1={handleLogout}
+            onPress={() => navigation.navigate("Home")}
           />
           <View style={styles.profile}>
-            <Image
-              source={require("../../assets/images/avatar.jpg")}
-              style={styles.image}
+            <NetworkImage
+              source={profile.imageUrl}
+              width={150}
+              height={150}
+              borderRadius={75}
             />
             <HeightSpacer height={5} />
 
             <View style={{ alignItems: "center" }}>
               <ReuseableText
-                text="Okechukwu"
+                text={profile.UserName}
                 family="medium"
                 size={SIZES.medium}
                 color={COLORS.white}

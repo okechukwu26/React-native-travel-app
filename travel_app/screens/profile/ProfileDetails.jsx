@@ -61,7 +61,7 @@ const ProfileDetails = ({ navigation }) => {
     }, [getProfileMemoized])
   );
 
-  console.log(profile);
+ 
 
   return (
     <View style={styles.container}>

@@ -91,6 +91,7 @@ const CreatePlace = ({ navigation }) => {
         description: "This field is required",
       }));
     }
+   
     setLoading(true);
     await createPlace("place", form);
     setLoading(false);

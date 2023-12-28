@@ -65,7 +65,10 @@ const Recommendation = () => {
   return (
     <View style={styles.container}>
       <View
-        style={[reuseable.rowWithSpace("space-between"), { paddingBottom: 10, paddingHorizontal:10 }]}
+        style={[
+          reuseable.rowWithSpace("space-between"),
+          { paddingBottom: 10, paddingHorizontal: 10 },
+        ]}
       >
         <ReuseableText
           text={"Recommendations"}
@@ -86,7 +89,7 @@ const Recommendation = () => {
         renderItem={({ item }) => (
           <ReuseableTitle
             item={item}
-            onPress={() => navigation.navigate("PlaceDetails", item._id)}
+            onPress={() => navigation.navigate("PlaceDetails", { item })}
           />
         )}
       />

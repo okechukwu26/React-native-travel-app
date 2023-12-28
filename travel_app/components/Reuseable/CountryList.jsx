@@ -12,7 +12,7 @@ const CountryList = ({ country, select }) => {
       <SelectDropdown
         data={country}
         onSelect={(selectedItem) => {
-          console.log(selectedItem._id);
+          ;
           selectedItem._id === undefined
             ? select((prev) => ({
                 ...prev,

@@ -8,7 +8,7 @@ export const LoggedIn = () => {
     const user = await AsyncStorage.getItem("user");
     if (user) {
       setLoggedIn(true);
-      console.log(JSON.parse(user).email);
+      
       setEmail(JSON.parse(user).email);
     }
   }, [isLogggedIn, email]);

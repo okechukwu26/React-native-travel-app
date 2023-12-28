@@ -6,10 +6,10 @@ import { COLORS, SIZES } from "../../constants/theme";
 import WidthSpacer from "./WidthSpace";
 import ReuseableText from "./ReuseableText";
 
-const Counter = () => {
-  const [counter, setCounter] = useState(0);
+const Counter = ({setCounter, counter}) => {
+
   const Decrement = useCallback(() => {
-    if (counter > 0) {
+    if (counter > 1) {
       setCounter(counter - 1);
     }
   });

@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
+  ActivityIndicator,
   View,
 } from "react-native";
 import React, { useCallback, useMemo, useRef, useState } from "react";
@@ -28,11 +28,20 @@ const Card = ({ navigation }) => {
   const sheetRef = useRef(null);
   const [method, setMethod] = useState([]);
   const [card, setCard] = useState("");
+  const [Card, setCards] = useState([]);
+  const [loading, setLoading] = useState(false);
   useFocusEffect(
     useCallback(() => {
       const getPayment = async () => {
-        const method = await getPaymentMethod();
-        setMethod(method.method);
+        setLoading(true);
+        const [method] = await Promise.all([getPaymentMethod()]);
+        if (method.method) {
+          setMethod(method.method);
+        }
+        if (method.card) {
+          setCards(method.card);
+        }
+        setLoading(false);
       };
       getPayment();
     }, [])
@@ -67,13 +76,12 @@ const Card = ({ navigation }) => {
     Visa: require("../../assets/images/Visa.png"),
     Mastercard: require("../../assets/images/Mastercard.png"),
     PayPal: require("../../assets/images/PayPal.png"),
-    // Add more card types as needed
   };
   const handleName = useCallback(async (item) => {
-    console.log(item);
     setCard(item);
     openSheet();
   }, []);
+  const myCard = (card) => Card.find((item) => item.card === card);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -87,83 +95,109 @@ const Card = ({ navigation }) => {
         />
       </View>
       <HeightSpacer height={40} />
-      <FlatList
-        vertical
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item}
-        data={method}
-        renderItem={({ item, index }) => (
-          <View style={styles.cardWrapper}>
-            <View
-              style={[
-                styles.cardContainer,
-                { backgroundColor: getCardColor(item) },
-              ]}
-            >
-              <View style={reuseable.rowWithSpace("space-between")}>
-                <ReuseableText
-                  family={"bold"}
-                  size={TEXT.xLarge}
-                  text={item}
-                  color={COLORS.white}
-                />
-                <MaterialCommunityIcons
-                  name="integrated-circuit-chip"
-                  size={35}
-                  color={COLORS.white}
-                />
-              </View>
-              <ReuseableText
-                color={COLORS.white}
-                size={TEXT.xLarge}
-                align={"center"}
-                text={generatedCardNumber(index)}
-                family={"xtrabold"}
-              />
-              <HeightSpacer height={10} />
-              <View style={reuseable.rowWithSpace("space-around")}>
-                <View>
+      {loading ? (
+        <ActivityIndicator size="large" color={COLORS.green} />
+      ) : method.length === 0 ? (
+        <ReuseableText
+          align={"center"}
+          text={"Create a payment method"}
+          size={TEXT.xLarge}
+          color={COLORS.dark}
+          family={"bold"}
+        />
+      ) : (
+        <FlatList
+          vertical
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item}
+          data={method}
+          renderItem={({ item, index }) => (
+            <View style={styles.cardWrapper}>
+              <View
+                style={[
+                  styles.cardContainer,
+                  { backgroundColor: getCardColor(item) },
+                ]}
+              >
+                <View style={reuseable.rowWithSpace("space-between")}>
                   <ReuseableText
-                    color={COLORS.white}
-                    size={TEXT.medium}
                     family={"bold"}
-                    text={"Card holder"}
+                    size={TEXT.xLarge}
+                    text={item}
+                    color={COLORS.white}
                   />
-                  <View style={{ height: 10 }}>
-                    <ReuseableBtn
-                      textColor={COLORS.white}
-                      btnText={"edit name"}
-                      width={100}
-                      backgroundColor={getCardColor(item)}
-                      borderColor={COLORS.lightWhite}
-                      borderWidth={1}
-                      onPress={() => handleName(item)}
+                  <MaterialCommunityIcons
+                    name="integrated-circuit-chip"
+                    size={35}
+                    color={COLORS.white}
+                  />
+                </View>
+                <ReuseableText
+                  color={COLORS.white}
+                  size={TEXT.xLarge}
+                  align={"center"}
+                  text={generatedCardNumber(index)}
+                  family={"xtrabold"}
+                />
+                <HeightSpacer height={10} />
+                <View style={reuseable.rowWithSpace("space-around")}>
+                  <View>
+                    <ReuseableText
+                      color={COLORS.white}
+                      size={TEXT.medium}
+                      family={"bold"}
+                      text={"Card holder"}
+                    />
+                    <View style={{ height: 30 }}>
+                      {myCard(item) === undefined ? (
+                        <ReuseableBtn
+                          textColor={COLORS.white}
+                          btnText={"edit name"}
+                          width={100}
+                          backgroundColor={getCardColor(item)}
+                          borderColor={COLORS.lightWhite}
+                          borderWidth={1}
+                          onPress={() => handleName(item)}
+                        />
+                      ) : (
+                        <ReuseableText
+                          size={TEXT.xLarge}
+                          family={"bold"}
+                          color={COLORS.white}
+                          text={myCard(item).name}
+                        />
+                      )}
+                    </View>
+                  </View>
+                  <View>
+                    <ReuseableText
+                      color={COLORS.white}
+                      size={TEXT.medium}
+                      family={"bold"}
+                      text={"Expires"}
+                    />
+                    <ReuseableText
+                      color={COLORS.white}
+                      size={TEXT.medium}
+                      family={"bold"}
+                      text={"7/27"}
                     />
                   </View>
                 </View>
-                <View>
-                  <ReuseableText
-                    color={COLORS.white}
-                    size={TEXT.medium}
-                    family={"bold"}
-                    text={"Expires"}
-                  />
-                  <ReuseableText
-                    color={COLORS.white}
-                    size={TEXT.medium}
-                    family={"bold"}
-                    text={"7/27"}
-                  />
+                <View style={reuseable.rowWithSpace("flex-end")}>
+                  <AssetImage width={60} height={40} data={cardImages[item]} />
                 </View>
               </View>
-              <View style={reuseable.rowWithSpace("flex-end")}>
-                <AssetImage width={60} height={40} data={cardImages[item]} />
-              </View>
+              <EditCard
+                ref={sheetRef}
+                closeSheet={closeSheet}
+                card={card}
+                navigation={navigation}
+              />
             </View>
-            <EditCard ref={sheetRef} closeSheet={closeSheet} card={card} />
-          </View>
-        )}
-      />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -175,7 +209,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 20,
   },
   cardContainer: {
-    height: 180,
+    height: 200,
     width: Dimensions.get("window").width - 20,
     borderColor: COLORS.green,
 

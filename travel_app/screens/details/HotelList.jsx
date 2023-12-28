@@ -82,7 +82,7 @@ const HotelList = () => {
             <View style={{ marginBottom: 9 }}>
               <ReuseableTitle
                 item={item}
-                onPress={() => navigation.navigate("HotelDetails", item._id)}
+                onPress={() => navigation.navigate("HotelDetails", { item })}
               />
             </View>
           )}

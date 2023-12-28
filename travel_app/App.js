@@ -30,7 +30,7 @@ import {
 } from "./screens";
 import BottomTabNavigation from "./components/Navigation/BottomTabNavigation";
 import Admin from "./components/Navigation/Admin";
-
+import ToastManager from "toastify-react-native"
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -52,6 +52,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+       
         <Stack.Screen
           name="Onboard"
           component={Onboardng}

@@ -9,7 +9,12 @@ import {
 import { COLORS, SIZES, TEXT } from "../../constants/theme";
 import ReuseableTitle from "../../components/Reuseable/ReuseableTitle";
 
+import { useRoute } from "@react-navigation/native";
+
 const Succcessful = ({ navigation }) => {
+  const route = useRoute();
+  const {info} = route.params;
+
   const hotel = {
     _id: "64c674d23cfa5e847bcd5430",
     country_id: "64c62bfc65af9f8c969a8d04",
@@ -23,6 +28,7 @@ const Succcessful = ({ navigation }) => {
   return (
     <View>
       <View style={{ marginTop: "20%" }}>
+        
         <AssetImage
           mode={"contain"}
           width={"100%"}
@@ -54,7 +60,7 @@ const Succcessful = ({ navigation }) => {
             text={"Room Details"}
           />
           <HeightSpacer height={20} />
-          <ReuseableTitle item={hotel} />
+          <ReuseableTitle item={info} />
           <HeightSpacer height={20} />
           <ReuseableBtn
             borderColor={COLORS.green}

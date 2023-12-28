@@ -1,5 +1,6 @@
 import { Image, StyleSheet, View } from "react-native";
 import React from "react";
+import { COLORS } from "../../constants/theme";
 
 const NetworkImage = ({ source, width, height, borderRadius, bottom }) => {
   return (
@@ -22,4 +23,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: bottom ? 0 : borderRadius,
     borderBottomRightRadius: bottom ? 0 : borderRadius,
   }),
+  lazyLoad: {
+    flex: 1,
+    overflow: "hidden",
+  },
 });

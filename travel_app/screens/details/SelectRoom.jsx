@@ -4,8 +4,31 @@ import { AppBar, HeightSpacer, ReuseableBtn } from "../../components";
 import { COLORS, SIZES } from "../../constants/theme";
 import ReuseableTitle from "../../components/Reuseable/ReuseableTitle";
 import reuseable from "../../components/Reuseable/reuseable.Style";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import ToastManager, { Toast } from "toastify-react-native";
 
 const SelectRoom = ({ navigation }) => {
+  const handleRoom = async (item) => {
+    try {
+      const user = await AsyncStorage.getItem("user");
+    
+      if (!user) {
+        Toast.error("please signin to book a room");
+        setTimeout(() => {
+          navigation.navigate("User");
+        }, 3000);
+        return;
+      }
+      const parse = JSON.parse(user);
+      navigation.navigate("SelectedRoom", {
+        ...item,
+        email: parse.email,
+        owner: parse.localId,
+      });
+    } catch (error) {
+      Toast.error("Something went wrong");
+    }
+  };
   const hotels = [
     {
       _id: "64c674d23cfa5e847bcd5430",
@@ -60,6 +83,7 @@ const SelectRoom = ({ navigation }) => {
   ];
   return (
     <View style={{ marginBottom: 70 }}>
+      <ToastManager width={300} />
       <View style={{ height: 80 }}>
         <AppBar
           top={30}
@@ -86,7 +110,7 @@ const SelectRoom = ({ navigation }) => {
                 width={SIZES.width - 50}
                 borderWidth={1}
                 borderColor={COLORS.green}
-                onPress={() => navigation.navigate("SelectedRoom", { item })}
+                onPress={() => handleRoom(item)}
               />
             </View>
             <HeightSpacer height={10} />
@@ -108,3 +132,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+//() => navigation.navigate("SelectedRoom", { item })

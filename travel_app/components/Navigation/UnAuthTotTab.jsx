@@ -11,7 +11,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const UnAuthTopTab = () => {
   const { isLogggedIn } = LoggedIn();
-  console.log(isLogggedIn);
+  
   return (
     <View style={{ backgroundColor: COLORS.lightWhite }}>
       <ToastManager width={256} />

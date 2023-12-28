@@ -1,7 +1,6 @@
 import {
-  FlatList,
   StyleSheet,
-  Text,
+  ActivityIndicator,
   View,
   VirtualizedList,
 } from "react-native";
@@ -10,17 +9,15 @@ import HeightSpacer from "../Reuseable/HeightSpacer";
 import { COLORS, SIZES, TEXT } from "../../constants/theme";
 import Country from "../Tiles/Country/Country";
 import ReuseableText from "../Reuseable/ReuseableText";
-import ShimmerPlaceholder from "react-native-shimmer-placeholder";
-import { LinearGradient } from "expo-linear-gradient";
+
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../firebase";
 
 import ToastManager, { Toast } from "toastify-react-native";
 
 const Places = () => {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [place, setPlace] = useState([]);
-  const itemsCount = 3;
 
   const getPlaces = useCallback(async () => {
     const db = firestore;
@@ -34,58 +31,21 @@ const Places = () => {
       });
     });
     setPlace(place1);
-    // const hotel1 = [];
-    // Hotel.forEach((doc) => {
-    //   hotel1.push({
-    //     _id: doc.id,
-    //     ...doc.data(),
-    //   });
-    // });
-    // setHotel(hotel1);
+
     setLoading(false);
   }, []);
   useEffect(() => {
     getPlaces();
   }, [getPlaces]);
 
-  const renderShimmerPlaceholder = () => {
-    return (
-      <View style={{ padding: 15 }}>
-        <ShimmerPlaceholder
-          visible={isLoading}
-          LinearGradient={LinearGradient}
-          style={{
-            width: 75,
-            height: 75,
-            borderRadius: 15,
-            marginRight: 10,
-          }}
-          duration={1000}
-        />
-        <HeightSpacer height={10} />
-        <ShimmerPlaceholder
-          visible={isLoading}
-          LinearGradient={LinearGradient}
-          style={{ width: 80, height: 20, borderRadius: 4, marginRight: 10 }}
-          duration={1000}
-        />
-      </View>
-    );
-  };
-
   return (
     <View>
       <ToastManager />
       <HeightSpacer height={15} />
       {isLoading ? (
-        <FlatList
-          data={Array.from({ length: itemsCount }, (_, index) =>
-            index.toString()
-          )}
-          horizontal
-          keyExtractor={(item) => item}
-          renderItem={() => renderShimmerPlaceholder()}
-        />
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color={COLORS.blue} />
+        </View>
       ) : (
         <View>
           <HeightSpacer height={15} />
@@ -107,6 +67,7 @@ const Places = () => {
               getItem={(data, index) => data[index]}
               renderItem={({ item, index }) => (
                 <View style={{ marginRight: SIZES.medium }}>
+                  {/* Replace this with your Country component */}
                   <Country item={item} />
                 </View>
               )}
@@ -120,4 +81,10 @@ const Places = () => {
 
 export default Places;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  activityIndicatorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

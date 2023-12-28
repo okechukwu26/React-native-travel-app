@@ -79,6 +79,7 @@ const Country = ({ navigation }) => {
     }
 
     setLoading(true);
+
     await createCountry("country", form);
     setLoading(false);
     setForm({ country: "", imageUrl: "", region: "", description: "" });

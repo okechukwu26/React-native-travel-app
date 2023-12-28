@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useRef } from "react";
 
 import { useRoute } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../constants/theme";
@@ -15,13 +15,34 @@ import {
   WidthSpacer,
 } from "../../components";
 import reuseable from "../../components/Reuseable/reuseable.Style";
+import { Booking } from "../../Request/BookHotel";
+
+import { Paystack, paystackProps } from "react-native-paystack-webview";
 
 const SelectedRoom = ({ navigation }) => {
   const router = useRoute();
-  const { item } = router.params;
-  console.log(item);
+  const item = router.params;
+  const publicKey = "pk_test_d8b15464638f89fcdfb8d554f6b9d68e075170ee";
+  const [loading, setLoading] = useState(false);
+  const [counter, setCounter] = useState(1);
+  const paystack = useRef(paystackProps.PayStackRef);
+  const handleSuccess = async (res) => {
+    setLoading(true);
+    await Booking(navigation, item, res.data.transactionRef.reference);
+    setLoading(false);
+  };
+  const handleFailure = (e) => {};
+
   return (
     <View>
+      <Paystack
+        ref={paystack}
+        paystackKey={publicKey}
+        billingEmail={item.email}
+        amount={Math.ceil(400 * counter)}
+        onSuccess={handleSuccess}
+        onCancel={handleFailure}
+      />
       <View style={{ height: 80 }}>
         <AppBar
           top={30}
@@ -95,7 +116,7 @@ const SelectedRoom = ({ navigation }) => {
                 family="regular"
                 size={SIZES.medium}
                 color={COLORS.dark}
-                text={" $ 400"}
+                text={`\$ ${400 * counter} `}
               />
             </View>
             <HeightSpacer height={10} />
@@ -129,7 +150,7 @@ const SelectedRoom = ({ navigation }) => {
                 color={COLORS.dark}
                 text={"4 Guest"}
               />
-              <Counter />
+              <Counter setCounter={setCounter} counter={counter} />
             </View>
             <HeightSpacer height={30} />
             <View style={{ marginHorizontal: 10 }}>
@@ -139,9 +160,10 @@ const SelectedRoom = ({ navigation }) => {
                 borderColor={COLORS.green}
                 width={SIZES.width - 50}
                 backgroundColor={COLORS.green}
-                btnText={"Book Room"}
+                btnText={loading ? "please wait..." : "Book Room"}
                 textColor={COLORS.white}
-                onPress={() => navigation.navigate("Successful")}
+                onPress={() => paystack.current.startTransaction()}
+                loader={loading}
               />
             </View>
             <HeightSpacer height={30} />
